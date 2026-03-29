@@ -16,6 +16,18 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const createStudent = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await UserService.createAdmin(req.body, req.file);
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "stduents account created successfully",
+        data: result,
+    });
+});
+
 export const UserController = {
     createAdmin,
 };

@@ -16,5 +16,14 @@ router.post(
     }
 )
 
+router.post(
+    "/create-student",
+    fileUploader.upload.single('file'),
+    (req: Request, res: Response, next: NextFunction) => {
+        req.body = userValidationSchema.createStudent.parse(JSON.parse(req.body.data))
+        return UserController.createAdmin(req, res, next)
+    }
+)
+
 
 export const UserRoutes = router;
