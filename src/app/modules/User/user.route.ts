@@ -1,17 +1,20 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import { UserController } from './user.controller';
+import { fileUploader } from '../../../halpers/multer';
+import { userValidationSchema } from './user.validation';
+
 
 const router = express.Router();
 
 router.post(
     "/create-admin",
-    UserController.createAdmin
+    fileUploader.upload.single('file'),
+    (req: Request, res: Response, next: NextFunction) => {
+        req.body = userValidationSchema.createAdmin.parse(JSON.parse(req.body.data))
+        return UserController.createAdmin(req, res, next)
+    }
 )
 
-router.post(
-    "/c",
-    UserController.createAdmin
-)
 
 export const UserRoutes = router;

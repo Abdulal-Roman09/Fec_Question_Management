@@ -8,10 +8,10 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
+  id       String   @id @default(uuid())
+  email    String   @unique
   password String
-  role     Role
+  role     UserRole
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -28,9 +28,11 @@ model Admin {
   email String @unique
   user  User   @relation(fields: [email], references: [email])
 
-  name    String?
-  phone   String?
-  address String?
+  // profile info
+  name         String?
+  phone        String?
+  address      String?
+  profileImage String?
 
   designation String?
   isActive    Boolean @default(true)
@@ -46,10 +48,11 @@ model Student {
   email String @unique
   user  User   @relation(fields: [email], references: [email])
 
-  // personal info
-  name    String?
-  phone   String?
-  address String?
+  // profile info
+  name         String?
+  phone        String?
+  address      String?
+  profileImage String?
 
   // academic info
   studentId String  @unique
@@ -74,12 +77,17 @@ model Department {
   name String @unique
   code String @unique
 
+  profileImage String?
+
   students Student[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("departments")
 }
 
-enum Role {
+enum UserRole {
   ADMIN
   STUDENT
 }
