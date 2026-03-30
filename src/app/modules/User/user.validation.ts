@@ -29,7 +29,7 @@ const createStudent = z.object({
         name: z.string().min(2, "Name must be at least 2 characters"),
         phone: z.string().regex(/^\d{11}$/, "Phone must be 11 digits"),
         address: z.string().optional(),
-        profileImage: z.string().url("Profile image must be valid URL"),
+        profileImage: z.string().optional(),
         studentId: z.string().min(3, "Student ID required"),
         batch: z.string().min(1, "Batch required"),
         semester: z.number().int().min(1).optional(),

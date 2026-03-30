@@ -21,7 +21,7 @@ router.post(
     fileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         req.body = userValidationSchema.createStudent.parse(JSON.parse(req.body.data))
-        return UserController.createAdmin(req, res, next)
+        return UserController.createStudent(req, res, next)
     }
 )
 

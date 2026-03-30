@@ -18,7 +18,7 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
 
 const createStudent = catchAsync(async (req: Request, res: Response) => {
 
-    const result = await UserService.createAdmin(req.body, req.file);
+    const result = await UserService.createStudent(req.body, req.file);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -30,4 +30,5 @@ const createStudent = catchAsync(async (req: Request, res: Response) => {
 
 export const UserController = {
     createAdmin,
+    createStudent
 };
