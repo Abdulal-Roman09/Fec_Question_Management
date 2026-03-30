@@ -58,6 +58,7 @@ const createAdmin = async (payload: any, file?: Express.Multer.File) => {
 
 const createStudent = async (payload: any, file?: Express.Multer.File) => {
     let profileImage = "";
+
     if (file) {
         const upload = await sendToCloudinary(file);
         profileImage = upload?.secure_url;
@@ -71,37 +72,52 @@ const createStudent = async (payload: any, file?: Express.Multer.File) => {
 
     if (existingUser) throw new Error("User with this email already exists");
 
-    const hashedPassword = await bcrypt.hash(validatedData.password, Number(config.saltRound));
+    const hashedPassword = await bcrypt.hash(
+        validatedData.password,
+        Number(config.saltRound)
+    );
 
-    const user = await prisma.user.create({
-        data: {
-            email: validatedData.email,
-            password: hashedPassword,
-            role: UserRole.STUDENT,
-        },
+    const result = await prisma.$transaction(async (tx) => {
+        const user = await tx.user.create({
+            data: {
+                email: validatedData.email,
+                password: hashedPassword,
+                role: UserRole.STUDENT,
+            },
+        });
+
+        const student = await tx.student.create({
+            data: {
+                ...validatedData.student,
+                email: user.email,
+                ...(profileImage && { profileImage }),
+            },
+        });
+
+        return {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            student: {
+                name: student.name,
+                phone: student.phone,
+                address: student.address || null,
+                profileImage: student.profileImage || null,
+                studentId: student.studentId,
+                batch: student.batch,
+                semester: student.semester ?? null,
+                section: student.section || null,
+                departmentId: student.departmentId,
+                admissionDate: student.admissionDate ?? null,
+                isActive: student.isActive ?? true,
+            },
+        };
     });
 
-    const studentData = {
-        ...validatedData.student,
-        email: user.email,
-        ...(profileImage && { profileImage }),
-    };
-
-    const student = await prisma.student.create({
-        data: studentData,
-    });
-
-    return {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        isActive: student.isActive,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        student: student,
-    };
+    return result;
 };
-
 export const UserService = {
     createAdmin,
     createStudent,
