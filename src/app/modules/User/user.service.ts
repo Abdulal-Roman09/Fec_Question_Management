@@ -6,6 +6,7 @@ import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 import { userValidationSchema } from "./user.validation";
 
 const createAdmin = async (payload: any, file?: Express.Multer.File) => {
+    console.log(file)
     if (file) {
         const upload = await sendToCloudinary(file);
         payload.admin.profileImage = upload?.secure_url;
@@ -57,6 +58,7 @@ const createAdmin = async (payload: any, file?: Express.Multer.File) => {
 };
 
 const createStudent = async (payload: any, file?: Express.Multer.File) => {
+    console.log(file)
     if (file) {
         const upload = await sendToCloudinary(file);
         payload.student.profileImage = upload?.secure_url;

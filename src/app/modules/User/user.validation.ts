@@ -52,23 +52,10 @@ const updateStudent = z.object({
     isActive: z.boolean().optional()
 });
 
-const createDepartment = z.object({
-    name: z.string().min(2, "Department name is required"),
-    code: z.string().min(1, "Department code is required"),
-    profileImage: z.string().url("Profile image must be valid URL")
-});
-
-const updateDepartment = z.object({
-    name: z.string().min(2).optional(),
-    code: z.string().optional(),
-    profileImage: z.string().url().optional()
-});
 
 export const userValidationSchema = {
     createAdmin,
     updateAdmin,
     createStudent,
-    updateStudent,
-    createDepartment,
-    updateDepartment
+    updateStudent
 }
