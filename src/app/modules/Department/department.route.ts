@@ -16,5 +16,10 @@ router.post(
     }
 )
 
+router.get(
+    "/",
+    DepartmentController.getAllFromDB
+)
+
 
 export const DepartmentRoutes = router;

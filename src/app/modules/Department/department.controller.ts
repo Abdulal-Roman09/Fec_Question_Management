@@ -16,7 +16,20 @@ const createDepartment = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await DepartmentService.getAllFromDB();
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "All Departments fetched successfully",
+        data: result,
+    });
+});
+
 
 export const DepartmentController = {
-    createDepartment
+    createDepartment,
+    getAllFromDB
 };

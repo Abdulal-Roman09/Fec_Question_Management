@@ -1,7 +1,7 @@
 import prisma from "../../../shared/prisma";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 
-const createDepartment = async (payload: { name: string; code: string },file?: Express.Multer.File) => {
+const createDepartment = async (payload: { name: string; code: string }, file?: Express.Multer.File) => {
     let profileImage = "";
 
     // upload image
@@ -39,6 +39,12 @@ const createDepartment = async (payload: { name: string; code: string },file?: E
     return result;
 };
 
+const getAllFromDB = async () => {
+    const result = await prisma.department.findMany()
+    return result
+}
+
 export const DepartmentService = {
     createDepartment,
+    getAllFromDB
 };
