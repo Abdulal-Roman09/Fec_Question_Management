@@ -28,8 +28,22 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+
+    const { id } = req.params
+    const result = await DepartmentService.deleteFromDB(id as string);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "delete Departments successfully",
+        data: result,
+    });
+});
+
 
 export const DepartmentController = {
     createDepartment,
-    getAllFromDB
+    getAllFromDB,
+    deleteFromDB
 };

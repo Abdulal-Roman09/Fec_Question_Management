@@ -21,5 +21,10 @@ router.get(
     DepartmentController.getAllFromDB
 )
 
+router.delete(
+    "/:id",
+    DepartmentController.deleteFromDB
+)
+
 
 export const DepartmentRoutes = router;

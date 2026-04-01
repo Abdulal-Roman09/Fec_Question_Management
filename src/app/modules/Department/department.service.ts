@@ -44,7 +44,17 @@ const getAllFromDB = async () => {
     return result
 }
 
+const deleteFromDB = async (id: string) => {
+    const result = await prisma.department.delete({
+        where: {
+            id
+        }
+    })
+    return result
+}
+
 export const DepartmentService = {
     createDepartment,
-    getAllFromDB
+    getAllFromDB,
+    deleteFromDB
 };
