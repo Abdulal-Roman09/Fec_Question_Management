@@ -28,7 +28,20 @@ const createStudent = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+
+    const result = await UserService.getAllFromDB();
+
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "stduents retrive successfully",
+        data: result,
+    });
+});
+
 export const UserController = {
     createAdmin,
-    createStudent
+    createStudent,
+    getAllFromDB
 };

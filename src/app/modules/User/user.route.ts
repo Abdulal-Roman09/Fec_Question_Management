@@ -25,5 +25,11 @@ router.post(
     }
 )
 
+router.get(
+    "/",
+    UserController.getAllFromDB
+
+)
+
 
 export const UserRoutes = router;

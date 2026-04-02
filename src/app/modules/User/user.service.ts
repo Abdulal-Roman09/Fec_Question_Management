@@ -118,7 +118,13 @@ const createStudent = async (payload: any, file?: Express.Multer.File) => {
 
     return result;
 };
+
+const getAllFromDB = async () => {
+    return await prisma.user.findMany({})
+}
+
 export const UserService = {
     createAdmin,
     createStudent,
+    getAllFromDB
 };
