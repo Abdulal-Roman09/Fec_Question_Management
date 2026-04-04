@@ -123,8 +123,18 @@ const getAllFromDB = async () => {
     return await prisma.user.findMany({})
 }
 
+const deleteFromDB = async (id: string) => {
+    const result = await prisma.department.delete({
+        where: {
+            id
+        }
+    })
+    return result
+}
+
 export const UserService = {
     createAdmin,
     createStudent,
-    getAllFromDB
+    getAllFromDB,
+    deleteFromDB
 };

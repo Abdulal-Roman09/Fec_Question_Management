@@ -31,5 +31,11 @@ router.get(
 
 )
 
+router.delete(
+    "/",
+    UserController.deleteFromDB
+
+)
+
 
 export const UserRoutes = router;
