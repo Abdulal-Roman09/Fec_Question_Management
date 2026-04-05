@@ -124,13 +124,31 @@ const getAllFromDB = async () => {
 }
 
 const deleteFromDB = async (id: string) => {
-    const result = await prisma.department.delete({
-        where: {
-            id
+    const result = await prisma.$transaction(async (tx) => {
+
+        const userData = await tx.user.findUnique({
+            where: { id }
+        });
+
+        if (!userData) {
+            throw new Error("User not found");
         }
-    })
-    return result
-}
+
+        await tx.student.delete({
+            where: {
+                email: userData.email
+            }
+        });
+
+        const deletedUser = await tx.user.delete({
+            where: { id }
+        });
+
+        return deletedUser;
+    });
+
+    return result;
+};
 
 export const UserService = {
     createAdmin,
