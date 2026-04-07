@@ -17,8 +17,9 @@ model User {
   updatedAt DateTime @updatedAt
 
   // relations
-  admin   Admin?
-  student Student?
+  admin    Admin?
+  student  Student?
+  question Question?
 
   @@map("users")
 }
@@ -81,10 +82,42 @@ model Department {
 
   students Student[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  questions Question[]
 
   @@map("departments")
+}
+
+model QuestionSet {
+  id String @id @default(uuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  questionImage String? 
+  questionFile  String? 
+
+  // Exam Information
+  examTitle  String 
+  subject    String 
+  courseCode String? 
+  examDate   DateTime?
+  duration   Int? 
+
+  // Academic Info
+  batch    String
+  semester Int?
+  section  String?
+  year       Int?  
+  session    String?   
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
 }
 
 enum UserRole {
