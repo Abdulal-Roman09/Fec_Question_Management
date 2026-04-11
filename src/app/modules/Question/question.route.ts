@@ -4,11 +4,10 @@ import { fileUploader } from '../../../halpers/multer';
 import { QuestionValidationSchema } from './question.validation';
 import { QuestionController } from './question.controller';
 
-
 const router = express.Router();
 
 router.post(
-    "/create-Question",
+    "/create-question",
     fileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         req.body = QuestionValidationSchema.createQuestion.parse(JSON.parse(req.body.data))
