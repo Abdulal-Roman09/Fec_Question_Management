@@ -17,9 +17,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   // relations
-  admin    Admin?
-  student  Student?
-  question Question?
+  admin   Admin?
+  student Student?
 
   @@map("users")
 }
@@ -45,7 +44,8 @@ model Admin {
 }
 
 model Student {
-  id    String @id @default(uuid())
+  id String @id @default(uuid())
+
   email String @unique
   user  User   @relation(fields: [email], references: [email])
 
@@ -67,8 +67,9 @@ model Student {
   admissionDate DateTime @default(now())
   isActive      Boolean  @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  questionSets QuestionSet[]
 
   @@map("students")
 }
@@ -82,9 +83,9 @@ model Department {
 
   students Student[]
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  questions Question[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  questionset QuestionSet[]
 
   @@map("departments")
 }
@@ -98,26 +99,25 @@ model QuestionSet {
   departmentId String
   department   Department @relation(fields: [departmentId], references: [id])
 
-  questionImage String? 
-  questionFile  String? 
+  questionImage String?
+  questionFile  String?
 
   // Exam Information
-  examTitle  String 
-  subject    String 
-  courseCode String? 
+  examTitle  String
+  subject    String
+  courseCode String?
   examDate   DateTime?
-  duration   Int? 
+  duration   Int?
 
   // Academic Info
   batch    String
   semester Int?
   section  String?
-  year       Int?  
-  session    String?   
+  year     Int?
+  session  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
 }
 
 enum UserRole {
