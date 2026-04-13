@@ -1,31 +1,43 @@
 import prisma from "../../../shared/prisma";
 import { TCreateQuestionPayload } from "./question.type";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
-import { ICloudinaryResponse } from "../../../interface/file";
 
-
-const createQuestion = async (payload: TCreateQuestionPayload, file?: ICloudinaryResponse) => {
+const insertInToDB = async (payload: TCreateQuestionPayload, files: any) => {
     let questionImage = "";
+    let questionFile = "";
 
-    if (file) {
-        const upload = await sendToCloudinary(file);
+    if (files?.image && files.image[0]) {
+        const upload = await sendToCloudinary(files.image[0]);
         questionImage = upload?.secure_url;
     }
-    console.log(questionImage)
-    console.log("payload:", payload)
+
+    if (files?.file && files.file[0]) {
+        const fileName = files.file[0].originalname?.split('.')[0] || 'file';
+        const upload = await sendToCloudinary(files.file[0], {
+            resource_type: 'auto',
+            public_id: fileName,
+            attachment: true
+        });
+        questionFile = upload?.secure_url;
+    }
+
+    console.log("questionImage:", questionImage);
+    console.log("questionFile:", questionFile);
+    console.log("payload:", payload);
 
     const existingQuestion = await prisma.questionSet.findFirst({
         where: {
-            studentId: payload.studentId,
             examTitle: payload.examTitle,
             subject: payload.subject,
             courseCode: payload.courseCode,
-            batch: payload.batch
+            batch: payload.batch,
+            year: payload.year,
+            session: payload.session
         },
     });
 
     if (existingQuestion) {
-        throw new Error("Question already exists for this exam & student");
+        throw new Error("Question already exists for this exam");
     }
 
     const result = await prisma.questionSet.create({
@@ -34,6 +46,7 @@ const createQuestion = async (payload: TCreateQuestionPayload, file?: ICloudinar
             departmentId: payload.departmentId,
 
             questionImage,
+            questionFile,
 
             examTitle: payload.examTitle,
             subject: payload.subject,
@@ -53,12 +66,7 @@ const createQuestion = async (payload: TCreateQuestionPayload, file?: ICloudinar
 };
 
 const getAllFromDB = async () => {
-    const result = await prisma.questionSet.findMany({
-        include: {
-            student: true,
-            department: true,
-        },
-    });
+    const result = await prisma.questionSet.findMany();
     return result;
 };
 
@@ -72,7 +80,7 @@ const deleteFromDB = async (id: string) => {
 };
 
 export const QuestionService = {
-    createQuestion,
+    insertInToDB,
     getAllFromDB,
     deleteFromDB,
 };
