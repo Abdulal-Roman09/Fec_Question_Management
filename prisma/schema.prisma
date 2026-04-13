@@ -83,8 +83,8 @@ model Department {
 
   students Student[]
 
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   questionset QuestionSet[]
 
   @@map("departments")

@@ -4,7 +4,7 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { QuestionService } from "./question.service";
 
-const createQuestion = catchAsync(async (req: Request, res: Response) => {
+const insertInToDB = catchAsync(async (req: Request, res: Response) => {
 
     const result = await QuestionService.createQuestion(req.body, req.file);
 
@@ -43,7 +43,7 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
 
 
 export const QuestionController = {
-    createQuestion,
+    insertInToDB,
     getAllFromDB,
     deleteFromDB
 };

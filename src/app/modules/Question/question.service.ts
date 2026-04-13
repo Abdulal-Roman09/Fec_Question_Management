@@ -11,6 +11,8 @@ const createQuestion = async (payload: TCreateQuestionPayload, file?: ICloudinar
         const upload = await sendToCloudinary(file);
         questionImage = upload?.secure_url;
     }
+    console.log(questionImage)
+    console.log("payload:", payload)
 
     const existingQuestion = await prisma.questionSet.findFirst({
         where: {

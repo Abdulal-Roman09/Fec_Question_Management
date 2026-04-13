@@ -11,7 +11,7 @@ router.post(
     fileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
         req.body = QuestionValidationSchema.createQuestion.parse(JSON.parse(req.body.data))
-        return QuestionController.createQuestion(req, res, next)
+        return QuestionController.insertInToDB(req, res, next)
     }
 )
 
