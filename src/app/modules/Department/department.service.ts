@@ -58,7 +58,20 @@ const deleteFromDB = async (id: string) => {
     return result
 }
 
+const sofDeleteFromDB = async (id: string) => {
+    const result = await prisma.department.update({
+        where: {
+            id
+        },
+        data: {
+            isDeleted: true
+        }
+    })
+    return result
+}
+
 export const DepartmentService = {
+    sofDeleteFromDB,
     createDepartment,
     getAllFromDB,
     deleteFromDB

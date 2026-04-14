@@ -1,3 +1,4 @@
+import { Status } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 
 
@@ -36,7 +37,37 @@ const deleteFromDB = async (id: string) => {
     return result;
 };
 
+const softDeleteFromDB = async (id: string) => {
+    return await prisma.$transaction(async (tx) => {
+
+        const studentData = await tx.student.findUnique({
+            where: { id },
+        });
+
+        if (!studentData) {
+            throw new Error("Student not found");
+        }
+
+        await tx.student.update({
+            where: { id },
+            data: {
+                isDeleted: true,
+            },
+        });
+
+        await tx.user.update({
+            where: { id: studentData.id },
+            data: {
+                status: Status.DELETED,
+            },
+        });
+
+        return { message: "Student & User soft deleted successfully" };
+    });
+};
+
 export const StudentService = {
     getAllFromDB,
     deleteFromDB,
+    softDeleteFromDB
 };

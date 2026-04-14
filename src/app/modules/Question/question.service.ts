@@ -84,7 +84,21 @@ const deleteFromDB = async (id: string) => {
     return result;
 };
 
+const softDeleteFromDB = async (id: string) => {
+    const result = await prisma.questionSet.update({
+        where: {
+            id,
+        },
+        data: {
+            isDeleted: true,
+        },
+    });
+
+    return result;
+};
+
 export const QuestionService = {
+    softDeleteFromDB,
     insertInToDB,
     getAllFromDB,
     deleteFromDB,
