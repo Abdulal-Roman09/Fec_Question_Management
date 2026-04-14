@@ -37,7 +37,15 @@ const createDepartment = async (payload: { name: string; code: string }, file?: 
 };
 
 const getAllFromDB = async () => {
-    const result = await prisma.department.findMany()
+    const result = await prisma.department.findMany({
+        where: {
+            isDeleted: false
+        },
+        include: {
+            questionset: true,
+            students: true
+        }
+    })
     return result
 }
 

@@ -12,6 +12,7 @@ model User {
   email    String   @unique
   password String
   role     UserRole
+  status   Status   @default(ACTIVE)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,7 +36,7 @@ model Admin {
   profileImage String?
 
   designation String?
-  isActive    Boolean @default(true)
+  isDeleted   Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,7 +66,7 @@ model Student {
   department   Department @relation(fields: [departmentId], references: [id])
 
   admissionDate DateTime @default(now())
-  isActive      Boolean  @default(true)
+  isDeleted     Boolean  @default(false)
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -75,17 +76,17 @@ model Student {
 }
 
 model Department {
-  id   String @id @default(uuid())
-  name String @unique
-  code String @unique
-
+  id           String  @id @default(uuid())
+  name         String  @unique
+  code         String  @unique
   profileImage String?
+  isDeleted    Boolean @default(false)
 
-  students Student[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
   questionset QuestionSet[]
+  students    Student[]
 
   @@map("departments")
 }
@@ -116,6 +117,7 @@ model QuestionSet {
   year     Int?
   session  String?
 
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -123,4 +125,10 @@ model QuestionSet {
 enum UserRole {
   ADMIN
   STUDENT
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
 }

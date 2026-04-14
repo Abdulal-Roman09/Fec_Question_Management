@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import config from "../../../config";
-import { UserRole } from "@prisma/client";
 import prisma from "../../../shared/prisma";
+import { Status, UserRole } from "@prisma/client";
 import { userValidationSchema } from "./user.validation";
 import { ICloudinaryResponse } from "../../../interface/file";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
@@ -41,7 +41,6 @@ const createAdmin = async (payload: any, file: ICloudinaryResponse) => {
             id: user.id,
             email: user.email,
             role: user.role,
-            isActive: admin.isActive,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
             admin: {
@@ -112,7 +111,6 @@ const createStudent = async (payload: any, file?: ICloudinaryResponse) => {
                 section: student.section || null,
                 departmentId: student.departmentId,
                 admissionDate: student.admissionDate ?? null,
-                isActive: student.isActive ?? true,
             },
         };
     });
@@ -121,10 +119,49 @@ const createStudent = async (payload: any, file?: ICloudinaryResponse) => {
 };
 
 const getAllFromDB = async () => {
-    return await prisma.user.findMany({})
-}
+    return await prisma.user.findMany({
+        where: {
+            status: Status.ACTIVE,
+        },
+        include: {
+            student: {
+                include: {
+                    department: true,
+                },
+            },
+            admin: true,
+        },
+    });
+};
 
 const deleteFromDB = async (id: string) => {
+    const result = await prisma.$transaction(async (tx) => {
+
+        const userData = await tx.user.findUnique({
+            where: { id }
+        });
+
+        if (!userData) {
+            throw new Error("User not found");
+        }
+
+        await tx.student.delete({
+            where: {
+                email: userData.email
+            }
+        });
+
+        const deletedUser = await tx.user.delete({
+            where: { id }
+        });
+
+        return deletedUser;
+    });
+
+    return result;
+};
+
+const softDeleteFromDB = async (id: string) => {
     const result = await prisma.$transaction(async (tx) => {
 
         const userData = await tx.user.findUnique({
@@ -155,5 +192,6 @@ export const UserService = {
     createAdmin,
     createStudent,
     getAllFromDB,
-    deleteFromDB
+    deleteFromDB,
+    softDeleteFromDB
 };

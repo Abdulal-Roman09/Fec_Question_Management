@@ -63,7 +63,15 @@ const insertInToDB = async (payload: TCreateQuestionPayload, files: any) => {
 };
 
 const getAllFromDB = async () => {
-    const result = await prisma.questionSet.findMany();
+    const result = await prisma.questionSet.findMany({
+        where: {
+            isDeleted: false
+        },
+        include: {
+            student: true,
+            department: true,
+        }
+    });
     return result;
 };
 
