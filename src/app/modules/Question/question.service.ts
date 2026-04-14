@@ -1,29 +1,26 @@
 import prisma from "../../../shared/prisma";
 import { TCreateQuestionPayload } from "./question.type";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
+import { ICloudinaryResponse } from "../../../interface/file";
 
 const insertInToDB = async (payload: TCreateQuestionPayload, files: any) => {
     let questionImage = "";
     let questionFile = "";
 
     if (files?.image && files.image[0]) {
-        const upload = await sendToCloudinary(files.image[0]);
+        const upload: ICloudinaryResponse = await sendToCloudinary(files.image[0]);
         questionImage = upload?.secure_url;
     }
 
     if (files?.file && files.file[0]) {
         const fileName = files.file[0].originalname?.split('.')[0] || 'file';
-        const upload = await sendToCloudinary(files.file[0], {
+        const upload: ICloudinaryResponse = await sendToCloudinary(files.file[0], {
             resource_type: 'auto',
             public_id: fileName,
             attachment: true
         });
         questionFile = upload?.secure_url;
     }
-
-    console.log("questionImage:", questionImage);
-    console.log("questionFile:", questionFile);
-    console.log("payload:", payload);
 
     const existingQuestion = await prisma.questionSet.findFirst({
         where: {

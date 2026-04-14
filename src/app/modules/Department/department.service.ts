@@ -1,16 +1,15 @@
 import prisma from "../../../shared/prisma";
+import { ICloudinaryResponse } from "../../../interface/file";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 
-const createDepartment = async (payload: { name: string; code: string }, file?: Express.Multer.File) => {
+const createDepartment = async (payload: { name: string; code: string }, file?: ICloudinaryResponse) => {
     let profileImage = "";
 
-    // upload image
     if (file) {
         const upload = await sendToCloudinary(file);
         profileImage = upload?.secure_url;
     }
 
-    // check duplicate by name OR code
     const existingDepartment = await prisma.department.findFirst({
         where: {
             OR: [
@@ -24,10 +23,8 @@ const createDepartment = async (payload: { name: string; code: string }, file?: 
         throw new Error("Department already exists");
     }
 
-    // uppercase code
     const upperCaseDepartmentCode = payload.code.toUpperCase();
 
-    // create department
     const result = await prisma.department.create({
         data: {
             name: payload.name,

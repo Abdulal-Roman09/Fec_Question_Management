@@ -1,11 +1,12 @@
 import bcrypt from "bcryptjs";
 import config from "../../../config";
-import prisma from "../../../shared/prisma";
 import { UserRole } from "@prisma/client";
-import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
+import prisma from "../../../shared/prisma";
 import { userValidationSchema } from "./user.validation";
+import { ICloudinaryResponse } from "../../../interface/file";
+import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 
-const createAdmin = async (payload: any, file?: Express.Multer.File) => {
+const createAdmin = async (payload: any, file: ICloudinaryResponse) => {
     if (file) {
         const upload = await sendToCloudinary(file);
         payload.admin.profileImage = upload?.secure_url;
@@ -56,7 +57,7 @@ const createAdmin = async (payload: any, file?: Express.Multer.File) => {
     return result;
 };
 
-const createStudent = async (payload: any, file?: Express.Multer.File) => {
+const createStudent = async (payload: any, file?: ICloudinaryResponse) => {
     let profileImage = "";
 
     if (file) {
