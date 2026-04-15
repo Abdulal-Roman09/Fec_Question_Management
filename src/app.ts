@@ -3,6 +3,7 @@ import httpStatus from 'http-status'
 import cookiParser from 'cookie-parser'
 import express, { Application } from 'express';
 import router from './app/routes';
+import globalErrorHandler from './app/middleware/globalErrorHandler';
 
 
 const app: Application = express();
@@ -36,5 +37,6 @@ app.use((req, res, next) => {
   });
 });
 
+app.use(globalErrorHandler)
 
 export default app;
