@@ -15,6 +15,10 @@ const config = {
         api_key: process.env.CLOUDINARY_API_KEY as string,
         api_secret: process.env.CLOUDINARY_API_SECRET as string,
     },
+    jwt: {
+        secret: process.env.JWT_SECRET as string,
+        expiresIn: process.env.JWT_EXPIRES_IN as string,
+    },
 };
 
 export default config;
