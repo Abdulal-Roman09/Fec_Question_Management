@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import prisma from "../../../shared/prisma";
-import { generateToken } from "../../../halpers/TokenGenarator";
-import { email } from "zod";
+import { generateAccessToken, generateRefreshToken } from "../../../halpers/TokenGenarator";
 
 const login = async (payload: { email: string; password: string }) => {
 
@@ -23,14 +22,21 @@ const login = async (payload: { email: string; password: string }) => {
     if (!isPasswordMatched) {
         throw new Error("Password incorrect");
     }
-    const token = generateToken({
+
+    const accessToken = generateAccessToken({
         id: userData.id,
         email: userData.email,
     });
-    
+
+    const refreshToken = generateRefreshToken({
+        id: userData.id,
+        email: userData.email,
+    });
+
     return {
         message: "Login successful",
-        token,
+        accessToken: accessToken,
+        refreshToken: refreshToken
     };
 };
 

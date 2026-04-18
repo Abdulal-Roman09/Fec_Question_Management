@@ -19,6 +19,11 @@ const config = {
         secret: process.env.JWT_SECRET as string,
         expiresIn: process.env.JWT_EXPIRES_IN as string,
     },
+    refresh: {
+        refresh_secret: process.env.JWT_REFRESH_SECRET as string,
+        refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN as string,
+    }
+
 };
 
 export default config;
