@@ -20,6 +20,7 @@ model User {
   // relations
   admin   Admin?
   student Student?
+  teacher Teacher?
 
   @@map("users")
 }
@@ -75,6 +76,33 @@ model Student {
   @@map("students")
 }
 
+model Teacher {
+  id String @id @default(uuid())
+
+  email String @unique
+  user  User   @relation(fields: [email], references: [email])
+
+  // profile info
+  name         String?
+  phone        String?
+  address      String?
+  profileImage String?
+
+  // professional info
+  designation  String?
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  joiningDate DateTime @default(now())
+
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teachers")
+}
+
 model Department {
   id           String  @id @default(uuid())
   name         String  @unique
@@ -87,6 +115,7 @@ model Department {
 
   questionset QuestionSet[]
   students    Student[]
+  teachers    Teacher[]
 
   @@map("departments")
 }
@@ -121,7 +150,6 @@ model QuestionSet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 
 enum UserRole {
   ADMIN

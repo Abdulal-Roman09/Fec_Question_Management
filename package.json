@@ -15,7 +15,6 @@
     "generate": "pnpm prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "6.16.3",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
@@ -28,6 +27,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@prisma/client": "5.22.0",
+    "@prisma/engines": "5.22.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
@@ -35,7 +36,7 @@
     "@types/multer": "^2.1.0",
     "@types/node": "^24.5.0",
     "dotenv": "^17.2.2",
-    "prisma": "6.16.3",
+    "prisma": "5.22.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   }
