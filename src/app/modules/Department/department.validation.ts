@@ -1,17 +1,18 @@
 import { z } from "zod";
-
-const departmentNames = z.enum(["EEE", "CSE", "CIVIL"], {
-    errorMap: () => ({ message: "Department name must be one of: EEE, CSE, CIVIL" })
-});
+import { DepartmentName } from "@prisma/client";
 
 const createDepartment = z.object({
-    name: departmentNames,
+    name: z.enum(Object.values(DepartmentName) as [string, ...string[]], {
+        message: "Department name must be one of: EEE, CSE, CIVIL"
+    }),
     code: z.string().min(1, "Department code is required"),
     profileImage: z.string().url().optional(),
 });
 
 const updateDepartment = z.object({
-    name: departmentNames.optional(),
+    name: z.enum(Object.values(DepartmentName) as [string, ...string[]], {
+        message: "Department name must be one of: EEE, CSE, CIVIL"
+    }).optional(),
     code: z.string().optional(),
     profileImage: z.string().url().optional(),
 });
