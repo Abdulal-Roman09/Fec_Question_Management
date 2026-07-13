@@ -6,7 +6,7 @@ import { DepartmentService } from "./department.service";
 
 const createDepartment = catchAsync(async (req: Request, res: Response) => {
 
-    const result = await DepartmentService.createDepartment(req.body, req.body.file);
+    const result = await DepartmentService.createDepartment(req.body, req.body.file as any);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
