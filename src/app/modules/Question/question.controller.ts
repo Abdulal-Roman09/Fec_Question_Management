@@ -38,8 +38,21 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const softDeleteFromDB = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params
+    const result = await QuestionService.softDeleteFromDB(id as string);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Question soft deleted successfully",
+        data: result,
+    });
+});
+
 export const QuestionController = {
     insertInToDB,
     getAllFromDB,
-    deleteFromDB
+    deleteFromDB,
+    softDeleteFromDB
 };

@@ -95,17 +95,21 @@ const createStudent = async (payload: any, file?: ICloudinaryResponse) => {
         });
 
         return {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
+            userData: {
+                id: user.id,
+                studentId: student.id,
+                email: user.email,
+                role: user.role,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
             student: {
+                id: student.id,
+                email: student.email,
                 name: student.name,
                 phone: student.phone,
                 address: student.address || null,
                 profileImage: student.profileImage || null,
-                studentId: student.studentId,
                 batch: student.batch,
                 semester: student.semester ?? null,
                 section: student.section || null,

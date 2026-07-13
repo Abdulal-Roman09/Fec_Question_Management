@@ -23,8 +23,8 @@ router.get(
 )
 
 router.delete(
-    "/:id",
-    QuestionController.deleteFromDB
+    "/soft-delete/:id",
+    QuestionController.softDeleteFromDB
 )
 
 export const QuestionRoutes = router;

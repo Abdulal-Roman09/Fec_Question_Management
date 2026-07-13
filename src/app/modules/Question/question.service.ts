@@ -4,6 +4,28 @@ import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 import { ICloudinaryResponse } from "../../../interface/file";
 
 const insertInToDB = async (payload: TCreateQuestionPayload, files: any) => {
+
+    const student = await prisma.student.findUnique({
+        where: {
+            id: payload.studentId,
+        },
+    });
+    console.log(student)
+
+    if (!student) {
+        throw new Error("Student not found");
+    }
+
+    const department = await prisma.department.findUnique({
+        where: {
+            id: payload.departmentId,
+        },
+    });
+
+    if (!department) {
+        throw new Error("Department not found");
+    }
+
     let questionImage = "";
     let questionFile = "";
 
@@ -22,20 +44,25 @@ const insertInToDB = async (payload: TCreateQuestionPayload, files: any) => {
         questionFile = upload?.secure_url;
     }
 
-    const existingQuestion = await prisma.questionSet.findFirst({
-        where: {
-            examTitle: payload.examTitle,
-            subject: payload.subject,
-            courseCode: payload.courseCode,
-            batch: payload.batch,
-            year: payload.year,
-            session: payload.session
-        },
-    });
+
+ const existingQuestion = await prisma.questionSet.findFirst({
+  where: {
+    examTitle: payload.examTitle,
+    subject: payload.subject,
+    courseCode: payload.courseCode,
+    batch: payload.batch,
+    semester: payload.semester,
+    section: payload.section,
+    year: payload.year,
+    session: payload.session,
+    departmentId: payload.departmentId,
+  },
+});
 
     if (existingQuestion) {
         throw new Error("Question already exists for this exam");
     }
+
 
     const result = await prisma.questionSet.create({
         data: {

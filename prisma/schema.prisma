@@ -58,10 +58,10 @@ model Student {
   profileImage String?
 
   // academic info
-  studentId String  @unique
-  batch     String
-  semester  Int?
-  section   String?
+
+  batch    String
+  semester Int?
+  section  String?
 
   departmentId String
   department   Department @relation(fields: [departmentId], references: [id])

@@ -30,7 +30,6 @@ const createStudent = z.object({
         phone: z.string().regex(/^\d{11}$/, "Phone must be 11 digits"),
         address: z.string().optional(),
         profileImage: z.string().optional(),
-        studentId: z.string().min(3, "Student ID required"),
         batch: z.string().min(1, "Batch required"),
         semester: z.number().int().min(1).optional(),
         section: z.string().optional(),

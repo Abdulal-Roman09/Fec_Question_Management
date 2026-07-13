@@ -32,7 +32,7 @@ router.get(
 )
 
 router.delete(
-    "/",
+    "/soft-delete/:id",
     UserController.deleteFromDB
 
 )
