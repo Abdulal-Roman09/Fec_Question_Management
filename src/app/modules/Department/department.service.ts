@@ -1,8 +1,7 @@
 import prisma from "../../../shared/prisma";
-import { ICloudinaryResponse } from "../../../interface/file";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 
-const createDepartment = async (payload: { name: string; code: string }, file?: ICloudinaryResponse) => {
+const createDepartment = async (payload: { name: string; code: string }, file?: any) => {
     let profileImage = "";
 
     if (file) {
