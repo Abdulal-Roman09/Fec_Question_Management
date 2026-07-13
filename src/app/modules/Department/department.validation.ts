@@ -2,7 +2,7 @@ import { z } from "zod";
 import { DepartmentName } from "@prisma/client";
 
 const createDepartment = z.object({
-    name: z.enum(Object.values(DepartmentName) as [string, ...string[]], {
+    name: z.nativeEnum(DepartmentName, {
         message: "Department name must be one of: EEE, CSE, CIVIL"
     }),
     code: z.string().min(1, "Department code is required"),
@@ -10,7 +10,7 @@ const createDepartment = z.object({
 });
 
 const updateDepartment = z.object({
-    name: z.enum(Object.values(DepartmentName) as [string, ...string[]], {
+    name: z.nativeEnum(DepartmentName, {
         message: "Department name must be one of: EEE, CSE, CIVIL"
     }).optional(),
     code: z.string().optional(),
