@@ -105,8 +105,8 @@ model Teacher {
 
 model Department {
   id           String         @id @default(uuid())
-  name         DepartmentName
-  code         String         @unique
+  name         String
+  code         DepartmentCode @unique
   profileImage String?
   isDeleted    Boolean        @default(false)
 
@@ -162,7 +162,7 @@ enum Status {
   DELETED
 }
 
-enum DepartmentName {
+enum DepartmentCode {
   EEE
   CSE
   CIVIL

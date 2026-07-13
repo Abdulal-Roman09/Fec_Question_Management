@@ -1,8 +1,12 @@
 import prisma from "../../../shared/prisma";
+import { DepartmentCode } from "@prisma/client";
 import { ICloudinaryResponse } from "../../../interface/file";
 import { sendToCloudinary } from "../../../halpers/sendToCloudinary";
 
-const createDepartment = async (payload: { name: string; code: string }, file?: ICloudinaryResponse) => {
+const createDepartment = async (
+    payload: { name: string; code: string },
+    file?: ICloudinaryResponse
+) => {
     let profileImage = "";
 
     if (file) {
@@ -10,11 +14,17 @@ const createDepartment = async (payload: { name: string; code: string }, file?: 
         profileImage = upload?.secure_url;
     }
 
+    const code = payload.code.toUpperCase();
+
+    if (!Object.values(DepartmentCode).includes(code as DepartmentCode)) {
+        throw new Error("Invalid department code");
+    }
+
     const existingDepartment = await prisma.department.findFirst({
         where: {
             OR: [
-                { name: payload.name },
-                { code: payload.code.toUpperCase() },
+                { name: payload.name.trim() },
+                { code: code as DepartmentCode },
             ],
         },
     });
@@ -23,17 +33,13 @@ const createDepartment = async (payload: { name: string; code: string }, file?: 
         throw new Error("Department already exists");
     }
 
-    const upperCaseDepartmentCode = payload.code.toUpperCase();
-
-    const result = await prisma.department.create({
+    return prisma.department.create({
         data: {
-            name: payload.name,
-            code: upperCaseDepartmentCode,
+            name: payload.name.trim(),
+            code: code as DepartmentCode,
             profileImage,
         },
     });
-
-    return result;
 };
 
 const getAllFromDB = async () => {
