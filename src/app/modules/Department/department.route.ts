@@ -11,7 +11,8 @@ router.post(
     "/create-department",
     fileUploader.upload.single('file'),
     (req: Request, res: Response, next: NextFunction) => {
-        req.body = DepartmentValidationSchema.createDepartment.parse(JSON.parse(req.body.data))
+        req.body = DepartmentValidationSchema.createDepartment.parse(JSON.parse(req.body.data));
+        req.body.file = req.file;
         return DepartmentController.createDepartment(req, res, next)
     }
 )

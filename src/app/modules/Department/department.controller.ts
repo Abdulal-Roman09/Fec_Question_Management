@@ -6,12 +6,12 @@ import { DepartmentService } from "./department.service";
 
 const createDepartment = catchAsync(async (req: Request, res: Response) => {
 
-    const result = await DepartmentService.createDepartment(req.body, req?.file);
+    const result = await DepartmentService.createDepartment(req.body, req.body.file);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,
-        message: "Administrator account created successfully",
+        message: "Department created successfully",
         data: result,
     });
 });
